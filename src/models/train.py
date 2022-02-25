@@ -3,7 +3,6 @@ import pickle
 
 import torch
 from tqdm import tqdm
-from transformers import get_linear_schedule_with_warmup
 
 root_dir = os.path.abspath("..")
 
@@ -16,13 +15,11 @@ def train(model, dataloader, config_name='config',
     batch_size = config['batch_size']
     epochs = config['epochs']
     learning_rate = config['learning_rate']
-    warmup_steps = config['warmup_steps']
     max_seq_len = config['max_seq_len']
 
     model.train()
     optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
-    scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps,
-                                                num_training_steps=-1)
+
     tmp_items_tens = None
     for epoch in range(epochs):
         proc_seq_count = 0
@@ -58,7 +55,6 @@ def train(model, dataloader, config_name='config',
 
             if proc_seq_count % batch_size == 0:
                 optimizer.step()
-                scheduler.step()
                 optimizer.zero_grad()
                 model.zero_grad()
             proc_seq_count += 1

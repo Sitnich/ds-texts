@@ -27,7 +27,8 @@ def prepare_dataloader(X, y):
     data_loader = DataLoader(dataset, batch_size=1, shuffle=True)
     return data_loader
 
-def download_model(root_dir = root_dir):
+
+def download_model(root_dir=root_dir):
     tokenizer = GPT2Tokenizer.from_pretrained('distilgpt2')
     model = GPT2LMHeadModel.from_pretrained('distilgpt2')
     torch.save(model.state_dict(), root_dir + '/model/distilgpt2_model.pt')
