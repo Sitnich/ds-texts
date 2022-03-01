@@ -1,4 +1,4 @@
-# Generating DS-like texts
+# Generating DS-like descriptions
 
 1) Activate virtualenv ```.\venv\Scripts\activate```
 2) Install requirements ```pip install -r requirements.txt```
