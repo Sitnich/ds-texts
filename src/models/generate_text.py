@@ -33,11 +33,11 @@ def generate_ft(model, tokenizer, prompt,
                 sorted_logits, sorted_indices = torch.sort(logits, descending=True)
                 cumulative_probs = torch.cumsum(F.softmax(sorted_logits, dim=-1), dim=-1)
 
-                sorted_indices_to_remove = cumulative_probs > top_p
-                sorted_indices_to_remove[:, 1:] = sorted_indices_to_remove[:, :-1].clone()
-                sorted_indices_to_remove[:, 0] = 0
+                sorted_indices_mask = cumulative_probs > top_p
+                sorted_indices_mask[:, 1:] = sorted_indices_mask[:, :-1].clone()
+                sorted_indices_mask[:, 0] = 0
 
-                indices_to_remove = sorted_indices[sorted_indices_to_remove]
+                indices_to_remove = sorted_indices[sorted_indices_mask]
                 logits[:, indices_to_remove] = -float("Inf")
 
                 # случайно выбираем токен из подходящих

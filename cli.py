@@ -61,30 +61,37 @@ def train(config, path):
               help='путь для сохранения описаний предметов')
 @click.option("--count", '-c', default=1,
               help='количество описаний на один предмет')
-def generate(generator, path_in, path_out, count):
+@click.option("--raw", '-r', default=False,
+              help='сгенерировать с помощью distilgpt2 без finetune')
+def generate(generator, path_in, path_out, count, raw):
     """
     генерирует описания для предметов из файла data/input/items.txt (path_in)
     и записывает их в data/output/descriptions.txt (path_out)
     """
 
     model = GPT2LMHeadModel.from_pretrained('distilgpt2')
-    # загружаем обученную ранее модель
-    model.load_state_dict(torch.load(root_dir + f"\model\distilgpt2_ds_8.pt",
-                                     map_location=torch.device('cpu')))
     tokenizer = GPT2Tokenizer.from_pretrained('distilgpt2')
 
     with open(path_in, 'r') as f:
         data = f.read().splitlines()
+    # загружаем обученную ранее модель
+    if not raw:
+        model.load_state_dict(torch.load(root_dir + f"\model\distilgpt2_ds_8.pt",
+                                     map_location=torch.device('cpu')))
 
-    labels, descs = gen.text_generation(data, model, tokenizer, gen_func=generator, entry_count=count)
+        labels, descriptions = gen.text_generation(
+            data, model, tokenizer, gen_func=generator, entry_count=count)
+    else:
+        labels, descriptions = gen.text_generation(
+            data, model, tokenizer, gen_func='torch', entry_count=count)
 
     if os.path.exists(path_out):
         os.remove(path_out)
     with open(path_out, 'a') as fo:
         for i in range(len(labels)):
             fo.write(f'Item:\n{labels[i]}\nDescription(s):\n')
-            for j in range(len(descs[i])):
-                fo.write(f'{descs[i][j]}\n')
+            for j in range(len(descriptions[i])):
+                fo.write(f'{descriptions[i][j]}\n')
             fo.write('\n')
 
 
@@ -108,10 +115,12 @@ def generate_test(generator):
         folder = 'mine-gen-func'
     else:
         folder = 'torch-gen-func'
-    ft_gen = gen.text_generation(y_test_list, model, tokenizer, gen_func=generator, entry_count=1)
+    ft_gen = gen.text_generation(
+        y_test_list, model, tokenizer, gen_func=generator, entry_count=1)
 
     model_nft = GPT2LMHeadModel.from_pretrained('distilgpt2')
-    nft_gen = gen.text_generation(y_test_list, model_nft, tokenizer, gen_func='torch', entry_count=1)
+    nft_gen = gen.text_generation(
+        y_test_list, model_nft, tokenizer, gen_func='torch', entry_count=1)
 
     ft_gen[1] = [desc[0] for desc in ft_gen[1]]
     nft_gen[1] = [desc[0] for desc in nft_gen[1]]

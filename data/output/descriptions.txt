@@ -1,5 +1,14 @@
 Item:
 Winter boots
 Description(s):
-Skirt worn by young knights of the Old City.The light blue boots are made of reinforced leather, and offer little in the way of defense.
+Trousers worn by young Winter Knights.They are worn by a young man, and the sound of his voice is heard in their footsteps.
+This long-weary black leather boots are soft and light, but they are extremely light, and offer a nice protection against frostbite.
+Black boots of the great wolf, who descended into a dark abyss.  The wolf is said to have lived to prepare for the Fire, and yet he was not born.
+
+Item:
+Cup of tea
+Description(s):
+Cup of tea which is commonly used by sorcerers.  Cup of tea is a miracle that restores HP, restores HP, restores HP.
+Cup of tea with white, sweet, and sweet flavor.  The white-roasted taste is associated with the infusion of dried tea.
+Cup of tea that was discovered in the Way of White by the descendants of the Catacombs, or the Dragon King.
 
